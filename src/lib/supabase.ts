@@ -4,11 +4,16 @@ import { createClient } from '@supabase/supabase-js'
 // aislado en su propio schema `faroles` (tablas, RLS y policies separadas de
 // las de Akira en `public`). Asi las dos apps conviven sin chocar.
 //
-// Config por env (Vite): pega la URL y la anon key del proyecto de Akira.
-//   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
-// Si faltan, la app corre en modo demo LOCAL con IndexedDB (sin nube).
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+// Config del proyecto Supabase de Akira. Por defecto va horneada aca (la
+// publishable key es PUBLICA por diseño: pensada para ir en el bundle del
+// cliente; la seguridad la da RLS + la tabla faroles.admins, no el secreto de
+// la key). Las env vars VITE_SUPABASE_* tienen prioridad si se definen, para
+// poder apuntar a otro proyecto sin tocar codigo.
+const DEFAULT_URL = 'https://turbsofuturtlbdsabfu.supabase.co'
+const DEFAULT_ANON_KEY = 'sb_publishable_8Aw2RH64oUjhpq6R_gLRSw_HdCzbwfZ'
+
+const url = (import.meta.env.VITE_SUPABASE_URL as string | undefined) || DEFAULT_URL
+const anonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || DEFAULT_ANON_KEY
 
 export const isSupabaseConfigured = Boolean(url && anonKey)
 
