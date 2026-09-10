@@ -41,6 +41,10 @@ type SpriteMeta = {
   footF: number //                    fraccion de altura donde el pie toca el piso
   poleLen: number //                  largo mano->farol (fraccion de la altura)
   gait: number //                     amplitud del vaiven de cada pierna (rad)
+  // Correccion horizontal por pierna (fraccion del ancho del lienzo, marco
+  // "mira a la derecha"). Sirve cuando las piernas del PNG estan pintadas en
+  // una postura muy abierta y hay que juntarlas bajo el cuerpo. + = a la derecha.
+  legDX?: { r: number; l: number }
 }
 
 const VARIANTS: SpriteMeta[] = [
@@ -75,6 +79,11 @@ const VARIANTS: SpriteMeta[] = [
     footF: 0.916,
     poleLen: 0.75, // la niña agarra el palo mas abajo; el farol sube mas
     gait: 0.12, //   piernas casi tapadas por la falda: vaiven corto
+    // El PNG de la niña trae las piernas en postura muy abierta: el pie derecho
+    // cae en x~0.757 (fuera del ruedo, que llega a ~0.71) y el izquierdo en
+    // x~0.355. Las juntamos bajo el cuerpo (centro de falda ~0.41) para que
+    // asomen parejas bajo la falda en vez de despegadas.
+    legDX: { r: -0.292, l: 0 },
   },
 ]
 const FIG_H = 82 // altura en pantalla del lienzo completo, por unidad de escala s
@@ -242,16 +251,18 @@ export class ParadeScene {
       ctx.scale(-1, 1)
       ctx.translate(-x, 0)
     }
-    const leg = (img: HTMLCanvasElement, rot: number) => {
+    const leg = (img: HTMLCanvasElement, rot: number, dxFrac: number) => {
       ctx.save()
       ctx.translate(pivotX, pivotY)
       ctx.rotate(rot)
       ctx.translate(-pivotX, -pivotY)
-      ctx.drawImage(img, originX, originY, fullW, fullH)
+      // dxFrac corre la pierna en horizontal (marco mira-a-la-derecha) para
+      // juntarla bajo el cuerpo cuando el PNG la trae muy abierta.
+      ctx.drawImage(img, originX + dxFrac * fullW, originY, fullW, fullH)
       ctx.restore()
     }
-    leg(legR, -gait) // pierna trasera (contrafase)
-    leg(legL, gait) // pierna delantera
+    leg(legR, -gait, meta.legDX?.r ?? 0) // pierna trasera (contrafase)
+    leg(legL, gait, meta.legDX?.l ?? 0) // pierna delantera
     ctx.drawImage(torso, originX, originY, fullW, fullH) // torso encima de las caderas
     ctx.restore()
   }
