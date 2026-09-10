@@ -77,7 +77,8 @@ const VARIANTS: SpriteMeta[] = [
     hand: { x: 0.636, y: 0.804 },
     poleDir: { x: 0.089, y: -0.996 },
     footF: 0.916,
-    poleLen: 0.92, // la niña agarra el palo mas abajo; sube mas el farol para que no le tape la cara
+    poleLen: 1.16, // la niña sostiene el palo largo; el farol se apoya en la PUNTA del palo,
+    //                justo encima de su cabeza -> asi no le tapa la cara y no queda flotando suelto
     gait: 0.12, //   piernas casi tapadas por la falda: vaiven corto
     // El PNG de la niña trae las piernas en postura muy abierta: el pie derecho
     // cae en x~0.757 (fuera del ruedo, que llega a ~0.71) y el izquierdo en
