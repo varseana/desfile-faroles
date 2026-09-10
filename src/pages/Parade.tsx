@@ -63,7 +63,7 @@ export default function Parade() {
         <canvas ref={canvasRef} />
 
         <div className="parade-title">
-          <span className="eyebrow">15 de Setiembre</span>
+          <span className="eyebrow">14 de Setiembre</span>
           <h1>Desfile de Faroles</h1>
           <span className="sub">Independencia de Costa Rica</span>
           <span className="flag" aria-hidden="true" />
