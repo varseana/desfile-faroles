@@ -1279,7 +1279,6 @@
     stage.style.display = "none";
     if (window.gsap) { gsap.to(invite, {opacity:1, duration:.6}); }
     else { invite.style.opacity = 1; }
-    try { sessionStorage.setItem("bristol_opened", "1"); } catch(e){}
     armReveals();
     initItinerary();
   }
@@ -1585,8 +1584,8 @@
     else { replayBtn.addEventListener("click", replayMap); }
   }
 
+  // siempre arrancar en el pasaporte, en cada refresh (sin recordar que ya se abrio)
   var alreadyOpened = false;
-  try { alreadyOpened = sessionStorage.getItem("bristol_opened") === "1"; } catch(e){}
 
   function open(){
     if (body.classList.contains("opening")) return;
